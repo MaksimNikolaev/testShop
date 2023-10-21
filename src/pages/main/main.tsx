@@ -1,4 +1,5 @@
-import { Player } from '../../components/app/player/player';
+
+import { Player } from '../../components/player/player';
 import style from './main.module.css';
 
 export const Main = () => {
