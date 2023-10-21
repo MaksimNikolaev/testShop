@@ -4,7 +4,7 @@ import { useRef } from 'react';
 export const Player = () => {
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
-  //Функция для паузы видео 
+  //Функция для паузы видео
   const pauseVideo = () => {
     if (iframeRef.current) {
       iframeRef.current.contentWindow?.postMessage(
@@ -30,10 +30,10 @@ export const Player = () => {
       ref={iframeRef}
       width='100%'
       height='100%'
-      src='https://www.youtube.com/embed/M7FIvfx5J10?controls=0&showinfo=0&rel=0&autoplay=1&enablejsapi=1'
+      src='https://www.youtube.com/embed/M7FIvfx5J10?controls=0&showinfo=0&rel=0&autoplay=1&enablejsapi=1&loop=1&playlist=M7FIvfx5J10'
       title=' '
-      allow='accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture;'
-      allowFullScreen      
+      allow='accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; autoplay'
+      allowFullScreen
     />
   );
 };
