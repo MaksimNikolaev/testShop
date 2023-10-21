@@ -33,7 +33,7 @@ export const Player = () => {
       src='https://www.youtube.com/embed/M7FIvfx5J10?controls=0&showinfo=0&rel=0&autoplay=1&enablejsapi=1'
       title=' '
       allow='accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture;'
-      allowFullScreen
-    ></iframe>
+      allowFullScreen      
+    />
   );
 };
