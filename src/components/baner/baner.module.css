@@ -6,16 +6,16 @@
   width: 251px;
   height: 357px;
   padding: 20px 10px 10px;
-  background-color: #86D3F4;
+  background-color: var(--blue-color);
   position: absolute;
   bottom: 144px;
   right: -251px;
-  box-sizing: border-box;   
+  box-sizing: border-box;
+  transition: .5s;  
 }
 
 .baner_visible {  
-  right: 0;
-  transition: .5s;
+  right: 0;  
 }
 
 .title {
@@ -24,7 +24,6 @@
   font-family: 'Roboto';
   font-size: 16px;
   font-weight: 500;
-  line-height: 1;
   text-transform: uppercase;
 }
 
@@ -37,7 +36,6 @@
   font-family: 'Roboto';
   font-size: 14px;
   font-weight: 400;
-  line-height: 1;
   max-width: 126px;
   margin: 0 auto;
 }
@@ -47,7 +45,6 @@
   font-family: 'Roboto';
   font-size: 16px;
   font-weight: 500;
-  line-height: 1;
   text-transform: uppercase;
   padding: 16px;
   max-width: 156px;
@@ -61,4 +58,12 @@
 
 .button:hover {
   background-color: #1f1f1f;
+}
+
+.qr {
+  background-color: #fff;
+  padding: 8px;
+  width: 126px;
+  height: 126px;
+  box-sizing: border-box;
 }

@@ -2,15 +2,16 @@ import QRCode from 'react-qr-code';
 import style from './baner.module.css';
 import { useEffect } from 'react';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
-import { setVisibleBaner } from '../../services/slices/promoSlice';
+import { setVisibleBaner, setVisiblePanel } from '../../services/slices/promoSlice';
 import { useAppSelector } from '../../hooks/useAppSelector';
 
 export const Baner = () => {
   const dispatch = useAppDispatch();
-  const showBanner = useAppSelector(state => state.promo.banerVisible)
+  const baner = useAppSelector(state => state.promo.banerVisible)
 
   const handleOpenPromo = () => {
     dispatch(setVisibleBaner(false));
+    dispatch(setVisiblePanel(true));
   };
 
   useEffect(() => {
@@ -23,7 +24,7 @@ export const Baner = () => {
   }, []);
 
   return (
-    <div className={`${style.baner} ${showBanner ? style.baner_visible : ''}`}>
+    <div className={`${style.baner} ${baner ? style.baner_visible : ''}`}>
       <h1 className={style.title}>
         ИСПОЛНИТЕ МЕЧТУ ВАШЕГО МАЛЫША!<br/> ПОДАРИТЕ ЕМУ СОБАКУ!
       </h1>

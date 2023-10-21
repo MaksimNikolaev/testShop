@@ -1,24 +1,29 @@
-import { createSlice } from '@reduxjs/toolkit'
-import type { PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
 
 export interface IPromo {
-  banerVisible: boolean
+  banerVisible: boolean;
+  panelVisible: boolean;
 }
 
 const initialState: IPromo = {
   banerVisible: false,
-}
+  panelVisible: false,
+};
 
 const promoSlice = createSlice({
   name: 'promo',
   initialState,
-  reducers: {    
+  reducers: {
     setVisibleBaner: (state, action: PayloadAction<boolean>) => {
-      state.banerVisible = action.payload
+      state.banerVisible = action.payload;
+    },
+    setVisiblePanel: (state, action: PayloadAction<boolean>) => {
+      state.panelVisible = action.payload;
     },
   },
-})
+});
 
-export const { setVisibleBaner } = promoSlice.actions
+export const { setVisibleBaner, setVisiblePanel } = promoSlice.actions;
 
-export default promoSlice.reducer
+export default promoSlice.reducer;
