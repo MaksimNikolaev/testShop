@@ -23,7 +23,6 @@ export const Panel = () => {
   const [isSuccess, setSuccess] = useState(false);
   const isValid = !checked || phone.length !== 10;
   const buttonsPerColumn = 3;
-  //const totalRow = 6;
   const totalButtons = 16;
 
   let maskPhone = '+7(___)___-__-__';
@@ -155,7 +154,8 @@ export const Panel = () => {
     }
   }, [activeElementIndex]);
 
-  /* useEffect(() => {
+  //Проверка на бездействие пользователя
+  useEffect(() => {
     let inactivityTimer: NodeJS.Timeout;
     const startInactivityTimer = () => {
       inactivityTimer = setTimeout(() => {
@@ -176,7 +176,7 @@ export const Panel = () => {
       window.addEventListener('click', handleUserActivity);
       clearTimeout(inactivityTimer);
     };
-  }, []); */
+  }, []);
 
   return (
     <>
