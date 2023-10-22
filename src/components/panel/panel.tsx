@@ -8,10 +8,13 @@ import {
 import { useAppSelector } from '../../hooks/useAppSelector';
 import React, { RefObject, useEffect, useState } from 'react';
 import { getValidatePhone } from '../../services/actions/phone';
+import { resetState } from '../../services/slices/phoneSlice';
 
 export const Panel = () => {
   const dispatch = useAppDispatch();
   const panel = useAppSelector(state => state.promo.panelVisible);
+  const validatePhone = useAppSelector(state => state.phone.validatePhone);
+  const isNotValidPhone = validatePhone && !validatePhone.valid;
 
   const handelClosePanel = () => {
     dispatch(setVisiblePanel(false));
@@ -40,29 +43,30 @@ export const Panel = () => {
     'Стереть',
     '0',
   ];
-  let maskPhone = "+7(___)___-__-__";
+  let maskPhone = '+7(___)___-__-__';
   for (let i = 0; i < phone.length; i++) {
-    maskPhone = maskPhone.replace("_", phone[i]);
+    maskPhone = maskPhone.replace('_', phone[i]);
   }
 
-  const handleClickNumber = (value: string, index:number) => {
+  const handleClickNumber = (value: string, index: number) => {
     switch (value) {
       case 'Стереть':
-        setPhone((prev) => prev.slice(0, -1));
+        setPhone(prev => prev.slice(0, -1));
         setActiveElementIndex(9);
+        dispatch(resetState());
         break;
       default:
         if (phone.length < 10) {
-          setPhone((prev) => prev + value);
+          setPhone(prev => prev + value);
           setActiveElementIndex(index);
         }
         break;
-    }   
-  }
+    }
+  };
 
   const buttonRefs: RefObject<HTMLButtonElement>[] = Array(13)
     .fill(null)
-    .map(() => React.createRef()); 
+    .map(() => React.createRef());
 
   useEffect(() => {
     const handleKeydown = (e: KeyboardEvent) => {
@@ -101,6 +105,7 @@ export const Panel = () => {
           break;
         case 'Backspace':
           handleBackspace();
+          dispatch(resetState());
           break;
         default:
           if (/\d/.test(e.key)) {
@@ -108,16 +113,16 @@ export const Panel = () => {
           }
           break;
       }
-    };    
+    };
 
     const handleDigitInput = (digit: string) => {
       if (phone.length < 10) {
-        setPhone((prev) => prev + digit);
+        setPhone(prev => prev + digit);
       }
     };
 
     const handleBackspace = () => {
-      setPhone((prev) => prev.slice(0, -1));
+      setPhone(prev => prev.slice(0, -1));
     };
 
     window.addEventListener('keydown', handleKeydown);
@@ -126,7 +131,7 @@ export const Panel = () => {
     };
   }, [activeElementIndex, buttonValues]);
 
-  useEffect(() => {    
+  useEffect(() => {
     if (buttonRefs[activeElementIndex].current) {
       buttonRefs[activeElementIndex].current?.focus();
     }
@@ -134,13 +139,19 @@ export const Panel = () => {
 
   const handleConfirmPhone = () => {
     dispatch(getValidatePhone(phone));
-  }
+  };
 
   return (
     <>
       <div className={`${style.panel} ${panel ? style.panel_visible : ''}`}>
         <h2 className={style.title}>Введите ваш номер мобильного телефона</h2>
-        <p className={style.number}>{maskPhone}</p>
+        <p
+          className={`${style.number} ${
+            isNotValidPhone ? style.number_error : ''
+          }`}
+        >
+          {maskPhone}
+        </p>
         <p className={style.text}>
           и с Вами свяжется наш менеждер для дальнейшей консультации
         </p>
@@ -163,24 +174,30 @@ export const Panel = () => {
             </li>
           ))}
         </ul>
-        <div className={style.agreement}>
-          <div>
-            <input
-              id={'agreement'}
-              type='checkbox'
-              className={style.agreement_input}
-              onClick={() => setChecked(!checked)}              
-            />
-            <label
-              htmlFor={'agreement'}
-              className={style.custom_checkbox}
-            ></label>
-          </div>
+        {isNotValidPhone ? (
+          <p className={style.not_valid_text}>Неверно введён номер</p>
+        ) : (
+          <div className={style.agreement}>
+            <div>
+              <input
+                id={'agreement'}
+                type='checkbox'
+                className={style.agreement_input}
+                checked={checked}
+                onClick={() => setChecked(!checked)}
+              />
+              <label
+                htmlFor={'agreement'}
+                className={style.custom_checkbox}
+              ></label>
+            </div>
 
-          <label htmlFor={'agreement'} className={style.agreement_label}>
-            Согласие на обработку персональных данных
-          </label>
-        </div>
+            <label htmlFor={'agreement'} className={style.agreement_label}>
+              Согласие на обработку персональных данных
+            </label>
+          </div>
+        )}
+
         <button
           ref={buttonRefs[11]}
           tabIndex={11 === activeElementIndex ? 0 : -1}

@@ -89,6 +89,20 @@
   text-align: center;
 }
 
+.number_error {
+  color: #EA0000
+}
+
+.not_valid_text {
+  color: #EA0000;
+  text-align: center;
+  font-family: 'Roboto';
+  font-size: 16px;
+  font-weight: 500;
+  text-transform: uppercase;
+  min-height: 44px;
+}
+
 .text {
   text-align: center;
   font-family: 'Roboto';

@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import promoSlice from './slices/promoSlice';
+import phoneSlice from './slices/phoneSlice';
 
 
 
 export const store = configureStore({
   reducer: {
-    promo: promoSlice,    
+    promo: promoSlice,
+    phone: phoneSlice,   
   },
 })
 
