@@ -31,6 +31,10 @@ export const Player = () => {
     panel ? pauseVideo() : playVideo();
   },[panel])
 
+  useEffect(()=> {
+    playVideo();
+  },[])
+
   return (
     <iframe
       className={style.video}
