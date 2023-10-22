@@ -1,8 +1,10 @@
+import { useAppSelector } from '../../hooks/useAppSelector';
 import style from './player.module.css';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 export const Player = () => {
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
+  const panel = useAppSelector(state => state.promo.panelVisible);
 
   //Функция для паузы видео
   const pauseVideo = () => {
@@ -23,6 +25,11 @@ export const Player = () => {
       );
     }
   };
+
+  //Управление паузой при открытии панели с промо
+  useEffect(()=> {
+    panel ? pauseVideo() : playVideo();
+  },[panel])
 
   return (
     <iframe

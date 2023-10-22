@@ -54,7 +54,7 @@ export const Panel = () => {
         break;
     }   
   }
-console.log(phone);
+
   const buttonRefs: RefObject<HTMLButtonElement>[] = Array(13)
     .fill(null)
     .map(() => React.createRef()); 
