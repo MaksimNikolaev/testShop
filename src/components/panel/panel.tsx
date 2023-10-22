@@ -17,6 +17,19 @@ export const Panel = () => {
   const panel = useAppSelector(state => state.promo.panelVisible);
   const validatePhone = useAppSelector(state => state.phone.validatePhone);
   const isNotValidPhone = validatePhone && !validatePhone.valid;
+  const [activeElementIndex, setActiveElementIndex] = useState(-1);
+  const [phone, setPhone] = useState('');
+  const [checked, setChecked] = useState(false);
+  const [isSuccess, setSuccess] = useState(false);
+  const isValid = !checked || phone.length !== 10;
+  const buttonsPerColumn = 3;
+  //const totalRow = 6;
+  const totalButtons = 16;
+
+  let maskPhone = '+7(___)___-__-__';
+  for (let i = 0; i < phone.length; i++) {
+    maskPhone = maskPhone.replace('_', phone[i]);
+  }
 
   const handelClosePanel = () => {
     dispatch(setVisiblePanel(false));
@@ -24,20 +37,6 @@ export const Panel = () => {
       dispatch(setVisibleBaner(true));
     }, 5000);
   };
-
-  const [activeElementIndex, setActiveElementIndex] = useState(-1);
-  const [phone, setPhone] = useState('');
-  const [checked, setChecked] = useState(false);
-  const [isSuccess, setSuccess] = useState(false);
-  const isValid = !checked || phone.length !== 10;
-  const buttonsPerColumn = 3;
-  const totalRow = 5;
-  const totalButtons = buttonsPerColumn * totalRow;
-
-  let maskPhone = '+7(___)___-__-__';
-  for (let i = 0; i < phone.length; i++) {
-    maskPhone = maskPhone.replace('_', phone[i]);
-  }
 
   //Обработчик клика на кнопки
   const handleClickNumber = (value: string, index: number) => {
@@ -56,7 +55,7 @@ export const Panel = () => {
     }
   };
 
-  const buttonRefs: RefObject<HTMLButtonElement>[] = Array(13)
+  const buttonRefs: RefObject<any>[] = Array(14)
     .fill(null)
     .map(() => React.createRef());
 
@@ -69,7 +68,7 @@ export const Panel = () => {
     if (validatePhone?.valid) {
       setSuccess(true);
     }
-  },[validatePhone?.valid])
+  }, [validatePhone?.valid]);
 
   //Использование навигации на клавиатуре
   useEffect(() => {
@@ -78,9 +77,9 @@ export const Panel = () => {
         case 'ArrowUp':
           setActiveElementIndex(prevIndex =>
             prevIndex - buttonsPerColumn >= 0
-              ? prevIndex === 10 || prevIndex === 11
-                ? prevIndex - 2
-                : prevIndex === 12
+            ? prevIndex === 10 || prevIndex === 11 || (prevIndex === 13 && isValid) 
+                ? prevIndex - 2 
+                : prevIndex === 12 || prevIndex === 13
                 ? prevIndex - 1
                 : prevIndex - buttonsPerColumn
               : prevIndex
@@ -91,9 +90,12 @@ export const Panel = () => {
             prevIndex === -1
               ? 0
               : prevIndex + buttonsPerColumn < totalButtons
-              ? prevIndex === 7 || prevIndex === 8 || prevIndex === 9
+              ? prevIndex === 7 ||
+                prevIndex === 8 ||
+                prevIndex === 9 ||
+                (prevIndex === 11 && isValid)
                 ? prevIndex + 2
-                : prevIndex === 10 || prevIndex === 11
+                : prevIndex === 10 || prevIndex === 11 || prevIndex === 12
                 ? prevIndex + 1
                 : prevIndex + buttonsPerColumn
               : prevIndex
@@ -101,12 +103,20 @@ export const Panel = () => {
           break;
         case 'ArrowLeft':
           setActiveElementIndex(prevIndex =>
-            prevIndex > 0 ? prevIndex - 1 : prevIndex
+            prevIndex > 0
+              ? prevIndex === 13 && isValid
+                ? prevIndex - 2
+                : prevIndex - 1
+              : prevIndex
           );
           break;
         case 'ArrowRight':
           setActiveElementIndex(prevIndex =>
-            prevIndex < buttonRefs.length - 1 ? prevIndex + 1 : prevIndex
+            prevIndex < buttonRefs.length - 1
+              ? prevIndex === 11 && isValid
+                ? prevIndex + 2
+                : prevIndex + 1
+              : prevIndex
           );
           break;
         case 'Backspace':
@@ -145,22 +155,18 @@ export const Panel = () => {
     }
   }, [activeElementIndex]);
 
-  useEffect(() => {
+  /* useEffect(() => {
     let inactivityTimer: NodeJS.Timeout;
-
     const startInactivityTimer = () => {
       inactivityTimer = setTimeout(() => {
         handelClosePanel();
       }, 10000);
     };
-
     const handleUserActivity = () => {
       clearTimeout(inactivityTimer);
       startInactivityTimer();
     };
-
     startInactivityTimer();
-
     window.addEventListener('mousemove', handleUserActivity);
     window.addEventListener('keydown', handleUserActivity);
     window.addEventListener('click', handleUserActivity);
@@ -170,7 +176,7 @@ export const Panel = () => {
       window.addEventListener('click', handleUserActivity);
       clearTimeout(inactivityTimer);
     };
-  }, []);
+  }, []); */
 
   return (
     <>
@@ -224,6 +230,13 @@ export const Panel = () => {
                     onChange={() => setChecked(!checked)}
                   />
                   <label
+                    ref={buttonRefs[11]}
+                    tabIndex={11 === activeElementIndex ? 0 : -1}
+                    onKeyDown={e => {
+                      if (e.key === 'Enter') {
+                        setChecked(!checked);
+                      }
+                    }}
                     htmlFor={'agreement'}
                     className={style.custom_checkbox}
                   ></label>
@@ -236,8 +249,8 @@ export const Panel = () => {
             )}
 
             <button
-              ref={buttonRefs[11]}
-              tabIndex={11 === activeElementIndex ? 0 : -1}
+              ref={buttonRefs[12]}
+              tabIndex={12 === activeElementIndex ? 0 : -1}
               className={style.number_btn}
               onClick={handleConfirmPhone}
               disabled={isValid}
@@ -250,8 +263,8 @@ export const Panel = () => {
       <button
         onClick={handelClosePanel}
         className={`${style.close} ${panel ? style.close_visible : ''}`}
-        ref={buttonRefs[12]}
-        tabIndex={12 === activeElementIndex ? 0 : -1}
+        ref={buttonRefs[13]}
+        tabIndex={13 === activeElementIndex ? 0 : -1}
       >
         <svg viewBox='0 0 88 52' fill='none' xmlns='http://www.w3.org/2000/svg'>
           <line
