@@ -1,46 +1,66 @@
-# Getting Started with Create React App
+# **Тестовое задание**
+https://test-shop-chi.vercel.app/
+## *Описание задания*
+В качестве тестового задания необходимо создать упрощенную демо-версию микросайта для SmartTV. 
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Чек лист задания:
 
-## Available Scripts
+<b>Верстка серий экранов</b>
 
-In the project directory, you can run:
+✔️ Промо-видео с баннером
 
-### `npm start`
+✔️ Экран ввода номера
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+✔️ Финальный инфо-экран
+  
+✔️ Навигация и механизм ввода номера при помощи экранной клавиатуры
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+✔️ Кнопка «Подтвердить номер» должна становиться доступной для выбора (enabled) только при полностью введенном номере и согласии с обработкой ПД
 
-### `npm test`
+✔️ Валидацию номера по количеству символов, что номер введен полностью
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+✔️ Для первого экрана добавить видео и баннер, появляющийся через 5 секунд от начала проигрывания ролика.
 
-### `npm run build`
+<b>Навигация должна осуществляться также и с клавиатуры:</b>
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+✔️ Стрелки для навигации между кнопками (включая кнопки “закрыть”, “подтвердить”);
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+✔️ Цифры и BACKSPACE для быстрого ввода номера;
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+✔️ ENTER для выбора кнопки;
 
-### `npm run eject`
+<b>Требования:</b>
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+✔️ Используйте React (использование TypeScript будет плюсом)
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+✔️ Если сочтете нужным, можете использовать сторонние библиотеки.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+✔️ Разрешение микросайта фиксированное, 1280х720.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+<b>Бонусные задания:</b>
 
-## Learn More
+✔️ Переход из экрана с видео и баннером должен паузить видео. Переход обратно должен продолжать воспроизведение.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+✔️ Добавить валидацию номера при помощи открытого сервиса (например, https://numverify.com/documentation).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+✔️ На экране с микросайтом добавьте таймер закрытия по бездействию, что интерактив закрывается, если пользователь ничего не делает 10 секунд. Происходит переход на промо-видео с баннером
+
+---
+## *Используемые технологии:*
+
+* React
+* Redux Toolkit
+* TS
+* HTML
+* CSS
+---
+## *Запуск проекта:*
+`npm i` — установка зависимостей
+
+`npm run start` — запускает приложение
+
+---
+## *Ссылки:*
+  
+[**Фронтенд**](https://test-shop-chi.vercel.app/)<br>
+[**Макет**](https://www.figma.com/file/TxI66vUCvCTtX5ljGR3fxe/FrontTestVOD?node-id=167%3A408)
