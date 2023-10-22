@@ -7,12 +7,7 @@ export const getValidatePhone = createAsyncThunk(
   async (phone: string , { rejectWithValue }) => {
     try {
       const response = await fetch(
-        `${API}?access_key=${ACCESS_KEY}&number=7${phone}&country_code=&format=1`,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
+        `${API}?access_key=${ACCESS_KEY}&number=7${phone}&country_code=&format=1`,        
       );
       if (!response.ok) {
         const errorData = await response.json();
