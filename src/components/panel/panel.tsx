@@ -132,7 +132,6 @@ export const Panel = () => {
 
     const handleDigitInput = (digit: string) => {
       if (phone.length < 10) {
-        console.log(phone.length);
         setPhone(prev => (prev += digit));
       }
     };
