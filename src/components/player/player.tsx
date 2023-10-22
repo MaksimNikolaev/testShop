@@ -30,18 +30,14 @@ export const Player = () => {
   useEffect(()=> {
     panel ? pauseVideo() : playVideo();
   },[panel])
-
-  useEffect(()=> {
-    playVideo();
-  },[])
-
+  
   return (
     <iframe
       className={style.video}
       ref={iframeRef}
       width='1280px'
       height='720px'
-      src='https://www.youtube.com/embed/M7FIvfx5J10?controls=0&showinfo=0&rel=0&autoplay=1&enablejsapi=1&loop=1&playlist=M7FIvfx5J10'
+      src='https://www.youtube.com/embed/M7FIvfx5J10?controls=0&showinfo=0&rel=0&autoplay=1&enablejsapi=1&loop=1&mute=1&playlist=M7FIvfx5J10'
       title=' '
       allow='accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; autoplay'
       allowFullScreen
