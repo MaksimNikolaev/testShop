@@ -7,6 +7,7 @@ import {
 } from '../../services/slices/promoSlice';
 import { useAppSelector } from '../../hooks/useAppSelector';
 import React, { RefObject, useEffect, useState } from 'react';
+import { getValidatePhone } from '../../services/actions/phone';
 
 export const Panel = () => {
   const dispatch = useAppDispatch();
@@ -21,6 +22,8 @@ export const Panel = () => {
 
   const [activeElementIndex, setActiveElementIndex] = useState(0);
   const [phone, setPhone] = useState('');
+  const [checked, setChecked] = useState(false);
+  const isValid = !checked || phone.length !== 10;
   const buttonsPerColumn = 3;
   const totalRow = 5;
   const totalButtons = buttonsPerColumn * totalRow;
@@ -42,14 +45,16 @@ export const Panel = () => {
     maskPhone = maskPhone.replace("_", phone[i]);
   }
 
-  const handleClickNumber = (value: string) => {
+  const handleClickNumber = (value: string, index:number) => {
     switch (value) {
       case 'Стереть':
         setPhone((prev) => prev.slice(0, -1));
+        setActiveElementIndex(9);
         break;
       default:
         if (phone.length < 10) {
           setPhone((prev) => prev + value);
+          setActiveElementIndex(index);
         }
         break;
     }   
@@ -127,6 +132,10 @@ export const Panel = () => {
     }
   }, [activeElementIndex]);
 
+  const handleConfirmPhone = () => {
+    dispatch(getValidatePhone(phone));
+  }
+
   return (
     <>
       <div className={`${style.panel} ${panel ? style.panel_visible : ''}`}>
@@ -147,7 +156,7 @@ export const Panel = () => {
                 ref={buttonRefs[index]}
                 tabIndex={index === activeElementIndex ? 0 : -1}
                 className={style.number_btn}
-                onClick={() => handleClickNumber(value)}
+                onClick={() => handleClickNumber(value, index)}
               >
                 {value}
               </button>
@@ -160,6 +169,7 @@ export const Panel = () => {
               id={'agreement'}
               type='checkbox'
               className={style.agreement_input}
+              onClick={() => setChecked(!checked)}              
             />
             <label
               htmlFor={'agreement'}
@@ -175,6 +185,8 @@ export const Panel = () => {
           ref={buttonRefs[11]}
           tabIndex={11 === activeElementIndex ? 0 : -1}
           className={style.number_btn}
+          onClick={handleConfirmPhone}
+          disabled={isValid}
         >
           Подтвердить номер
         </button>

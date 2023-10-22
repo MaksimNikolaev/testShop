@@ -1,5 +1,5 @@
 .baner {
-  display: flex;
+  display: none;
   flex-direction: column;
   justify-content: center;
   row-gap: 20px;
@@ -15,6 +15,7 @@
 }
 
 .baner_visible {  
+  display: flex;
   right: 0;  
 }
 
