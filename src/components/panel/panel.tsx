@@ -108,7 +108,7 @@ export const Panel = () => {
           dispatch(resetState());
           break;
         default:
-          if (/\d/.test(e.key)) {
+          if (/\d/.test(e.key) && !/^(F[1-9]|F1[0-2])$/.test(e.key)) {
             handleDigitInput(e.key);
           }
           break;
