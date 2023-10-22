@@ -10,6 +10,7 @@ import React, { RefObject, useEffect, useState } from 'react';
 import { getValidatePhone } from '../../services/actions/phone';
 import { resetState } from '../../services/slices/phoneSlice';
 import { buttonValues } from '../../utils/constants';
+import { Final } from '../final/final';
 
 export const Panel = () => {
   const dispatch = useAppDispatch();
@@ -27,6 +28,7 @@ export const Panel = () => {
   const [activeElementIndex, setActiveElementIndex] = useState(-1);
   const [phone, setPhone] = useState('');
   const [checked, setChecked] = useState(false);
+  const [isSuccess, setSuccess] = useState(false);
   const isValid = !checked || phone.length !== 10;
   const buttonsPerColumn = 3;
   const totalRow = 5;
@@ -62,6 +64,12 @@ export const Panel = () => {
   const handleConfirmPhone = () => {
     dispatch(getValidatePhone(phone));
   };
+
+  useEffect(() => {
+    if (validatePhone?.valid) {
+      setSuccess(true);
+    }
+  },[validatePhone?.valid])
 
   //Использование навигации на клавиатуре
   useEffect(() => {
@@ -129,7 +137,7 @@ export const Panel = () => {
       window.removeEventListener('keydown', handleKeydown);
     };
   }, [activeElementIndex, buttonValues, phone.length]);
-  
+
   //Установка фокуса на элементе
   useEffect(() => {
     if (buttonRefs[activeElementIndex]?.current) {
@@ -167,69 +175,77 @@ export const Panel = () => {
   return (
     <>
       <div className={`${style.panel} ${panel ? style.panel_visible : ''}`}>
-        <h2 className={style.title}>Введите ваш номер мобильного телефона</h2>
-        <p
-          className={`${style.number} ${
-            isNotValidPhone ? style.number_error : ''
-          }`}
-        >
-          {maskPhone}
-        </p>
-        <p className={style.text}>
-          и с Вами свяжется наш менеждер для дальнейшей консультации
-        </p>
-        <ul className={style.number_container}>
-          {buttonValues.map((value, index) => (
-            <li
-              key={index}
-              className={`${style.list_item} ${
-                index === 9 ? style.number_delete : style.number_item
+        {isSuccess ? (
+          <Final />
+        ) : (
+          <>
+            <h2 className={style.title}>
+              Введите ваш номер мобильного телефона
+            </h2>
+            <p
+              className={`${style.number} ${
+                isNotValidPhone ? style.number_error : ''
               }`}
             >
-              <button
-                ref={buttonRefs[index]}
-                tabIndex={index === activeElementIndex ? 0 : -1}
-                className={style.number_btn}
-                onClick={() => handleClickNumber(value, index)}
-              >
-                {value}
-              </button>
-            </li>
-          ))}
-        </ul>
-        {isNotValidPhone ? (
-          <p className={style.not_valid_text}>Неверно введён номер</p>
-        ) : (
-          <div className={style.agreement}>
-            <div>
-              <input
-                id={'agreement'}
-                type='checkbox'
-                className={style.agreement_input}
-                checked={checked}
-                onChange={() => setChecked(!checked)}
-              />
-              <label
-                htmlFor={'agreement'}
-                className={style.custom_checkbox}
-              ></label>
-            </div>
+              {maskPhone}
+            </p>
+            <p className={style.text}>
+              и с Вами свяжется наш менеждер для дальнейшей консультации
+            </p>
+            <ul className={style.number_container}>
+              {buttonValues.map((value, index) => (
+                <li
+                  key={index}
+                  className={`${style.list_item} ${
+                    index === 9 ? style.number_delete : style.number_item
+                  }`}
+                >
+                  <button
+                    ref={buttonRefs[index]}
+                    tabIndex={index === activeElementIndex ? 0 : -1}
+                    className={style.number_btn}
+                    onClick={() => handleClickNumber(value, index)}
+                  >
+                    {value}
+                  </button>
+                </li>
+              ))}
+            </ul>
+            {isNotValidPhone ? (
+              <p className={style.not_valid_text}>Неверно введён номер</p>
+            ) : (
+              <div className={style.agreement}>
+                <div>
+                  <input
+                    id={'agreement'}
+                    type='checkbox'
+                    className={style.agreement_input}
+                    checked={checked}
+                    onChange={() => setChecked(!checked)}
+                  />
+                  <label
+                    htmlFor={'agreement'}
+                    className={style.custom_checkbox}
+                  ></label>
+                </div>
 
-            <label htmlFor={'agreement'} className={style.agreement_label}>
-              Согласие на обработку персональных данных
-            </label>
-          </div>
+                <label htmlFor={'agreement'} className={style.agreement_label}>
+                  Согласие на обработку персональных данных
+                </label>
+              </div>
+            )}
+
+            <button
+              ref={buttonRefs[11]}
+              tabIndex={11 === activeElementIndex ? 0 : -1}
+              className={style.number_btn}
+              onClick={handleConfirmPhone}
+              disabled={isValid}
+            >
+              Подтвердить номер
+            </button>
+          </>
         )}
-
-        <button
-          ref={buttonRefs[11]}
-          tabIndex={11 === activeElementIndex ? 0 : -1}
-          className={style.number_btn}
-          onClick={handleConfirmPhone}
-          disabled={isValid}
-        >
-          Подтвердить номер
-        </button>
       </div>
       <button
         onClick={handelClosePanel}
