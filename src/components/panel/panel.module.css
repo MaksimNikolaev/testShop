@@ -38,9 +38,10 @@
   transition: .3s;
   stroke: #000;
   cursor: pointer;
+  outline: none;
 }
 
-.close:hover {
+.close:hover, .close:focus {
   background: #000;
   stroke: #fff;
 }
@@ -126,7 +127,7 @@
   cursor: pointer;
 }
 
-.number_btn:hover {
+.number_btn:hover, .number_btn:focus {
   background-color: #000;
   color: #fff;
   transition: .3s;
