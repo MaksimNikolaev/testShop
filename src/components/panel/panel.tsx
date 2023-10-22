@@ -9,6 +9,7 @@ import { useAppSelector } from '../../hooks/useAppSelector';
 import React, { RefObject, useEffect, useState } from 'react';
 import { getValidatePhone } from '../../services/actions/phone';
 import { resetState } from '../../services/slices/phoneSlice';
+import { buttonValues } from '../../utils/constants';
 
 export const Panel = () => {
   const dispatch = useAppDispatch();
@@ -23,31 +24,20 @@ export const Panel = () => {
     }, 5000);
   };
 
-  const [activeElementIndex, setActiveElementIndex] = useState(0);
+  const [activeElementIndex, setActiveElementIndex] = useState(-1);
   const [phone, setPhone] = useState('');
   const [checked, setChecked] = useState(false);
   const isValid = !checked || phone.length !== 10;
   const buttonsPerColumn = 3;
   const totalRow = 5;
   const totalButtons = buttonsPerColumn * totalRow;
-  const buttonValues = [
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-    '6',
-    '7',
-    '8',
-    '9',
-    'Стереть',
-    '0',
-  ];
+
   let maskPhone = '+7(___)___-__-__';
   for (let i = 0; i < phone.length; i++) {
     maskPhone = maskPhone.replace('_', phone[i]);
   }
 
+  //Обработчик клика на кнопки
   const handleClickNumber = (value: string, index: number) => {
     switch (value) {
       case 'Стереть':
@@ -57,7 +47,7 @@ export const Panel = () => {
         break;
       default:
         if (phone.length < 10) {
-          setPhone(prev => prev + value);
+          setPhone(prev => (prev += value));
           setActiveElementIndex(index);
         }
         break;
@@ -68,6 +58,12 @@ export const Panel = () => {
     .fill(null)
     .map(() => React.createRef());
 
+  //Проверка номера телефона
+  const handleConfirmPhone = () => {
+    dispatch(getValidatePhone(phone));
+  };
+
+  //Использование навигации на клавиатуре
   useEffect(() => {
     const handleKeydown = (e: KeyboardEvent) => {
       switch (e.key) {
@@ -84,7 +80,9 @@ export const Panel = () => {
           break;
         case 'ArrowDown':
           setActiveElementIndex(prevIndex =>
-            prevIndex + buttonsPerColumn < totalButtons
+            prevIndex === -1
+              ? 0
+              : prevIndex + buttonsPerColumn < totalButtons
               ? prevIndex === 7 || prevIndex === 8 || prevIndex === 9
                 ? prevIndex + 2
                 : prevIndex === 10 || prevIndex === 11
@@ -117,7 +115,8 @@ export const Panel = () => {
 
     const handleDigitInput = (digit: string) => {
       if (phone.length < 10) {
-        setPhone(prev => prev + digit);
+        console.log(phone.length);
+        setPhone(prev => (prev += digit));
       }
     };
 
@@ -129,17 +128,41 @@ export const Panel = () => {
     return () => {
       window.removeEventListener('keydown', handleKeydown);
     };
-  }, [activeElementIndex, buttonValues]);
-
+  }, [activeElementIndex, buttonValues, phone.length]);
+  
+  //Установка фокуса на элементе
   useEffect(() => {
-    if (buttonRefs[activeElementIndex].current) {
-      buttonRefs[activeElementIndex].current?.focus();
+    if (buttonRefs[activeElementIndex]?.current) {
+      buttonRefs[activeElementIndex]?.current?.focus();
     }
   }, [activeElementIndex]);
 
-  const handleConfirmPhone = () => {
-    dispatch(getValidatePhone(phone));
-  };
+  useEffect(() => {
+    let inactivityTimer: NodeJS.Timeout;
+
+    const startInactivityTimer = () => {
+      inactivityTimer = setTimeout(() => {
+        handelClosePanel();
+      }, 10000);
+    };
+
+    const handleUserActivity = () => {
+      clearTimeout(inactivityTimer);
+      startInactivityTimer();
+    };
+
+    startInactivityTimer();
+
+    window.addEventListener('mousemove', handleUserActivity);
+    window.addEventListener('keydown', handleUserActivity);
+    window.addEventListener('click', handleUserActivity);
+    return () => {
+      window.addEventListener('mousemove', handleUserActivity);
+      window.addEventListener('keydown', handleUserActivity);
+      window.addEventListener('click', handleUserActivity);
+      clearTimeout(inactivityTimer);
+    };
+  }, []);
 
   return (
     <>
@@ -184,7 +207,7 @@ export const Panel = () => {
                 type='checkbox'
                 className={style.agreement_input}
                 checked={checked}
-                onClick={() => setChecked(!checked)}
+                onChange={() => setChecked(!checked)}
               />
               <label
                 htmlFor={'agreement'}
